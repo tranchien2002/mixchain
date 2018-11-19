@@ -15,37 +15,20 @@
 /**
  * Sample access control list.
  */
-rule EverybodyCanReadEverything {
-    description: "Allow all participants read access to all resources"
-    participant: "io.mixchain.network.SampleParticipant"
-    operation: READ
-    resource: "io.mixchain.network.*"
-    action: ALLOW
-}
-
-rule EverybodyCanSubmitTransactions {
-    description: "Allow all participants to submit transactions"
-    participant: "io.mixchain.network.SampleParticipant"
-    operation: CREATE
-    resource: "io.mixchain.network.SampleTransaction"
-    action: ALLOW
-}
-
-rule OwnerHasFullAccessToTheirAssets {
-    description: "Allow all participants full access to their assets"
-    participant(p): "io.mixchain.network.SampleParticipant"
+rule Default {
+    description: "Allow all participants access to all resources"
+    participant: "ANY"
     operation: ALL
-    resource(r): "io.mixchain.network.SampleAsset"
-    condition: (r.owner.getIdentifier() === p.getIdentifier())
+    resource: "org.acme.vehicle.lifecycle.**"
     action: ALLOW
 }
 
 rule SystemACL {
-  description:  "System ACL to permit all access"
-  participant: "org.hyperledger.composer.system.Participant"
-  operation: ALL
-  resource: "org.hyperledger.composer.system.**"
-  action: ALLOW
+    description:  "System ACL to permit all access"
+    participant: "org.hyperledger.composer.system.Participant"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
 }
 
 rule NetworkAdminUser {
