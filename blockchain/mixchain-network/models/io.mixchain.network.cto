@@ -18,6 +18,18 @@
 
 namespace io.mixchain.network
 
+participant Individual identified by id {
+  o String id
+  o String firstName
+  o String lastName
+}
+
+participant RepairShop identified by id {
+  o String id
+  o String name
+  o String address
+}
+
 participant SampleParticipant identified by participantId {
   o String participantId
   o String firstName
