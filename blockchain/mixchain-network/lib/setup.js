@@ -14,6 +14,8 @@
 
 /* global getFactory getParticipantRegistry getAssetRegistry */
 
+'use strict';
+
 /**
  * Setup the demo
  * @param {org.acme.vehicle.lifecycle.SetupDemo} setupDemo - the SetupDemo transaction
@@ -21,124 +23,124 @@
  */
 async function setupDemo(setupDemo) {
   // eslint-disable-line no-unused-vars
-  console.log("setupDemo");
+  console.log('setupDemo');
 
   const factory = getFactory();
-  const NS_M = "org.acme.vehicle.lifecycle.manufacturer";
-  const NS = "org.acme.vehicle.lifecycle";
-  const NS_D = "org.vda";
+  const NS_M = 'org.acme.vehicle.lifecycle.manufacturer';
+  const NS = 'org.acme.vehicle.lifecycle';
+  const NS_D = 'org.vda';
 
   const names = [
-    "dan",
-    "simon",
-    "jake",
-    "anastasia",
-    "matthew",
-    "mark",
-    "fenglian",
-    "sam",
-    "james",
-    "nick",
-    "caroline",
-    "rachel",
-    "john",
-    "rob",
-    "tom",
-    "paul",
-    "ed",
-    "dave",
-    "anthony",
-    "toby",
-    "ant",
-    "matt",
-    "anna"
+    'dan',
+    'simon',
+    'jake',
+    'anastasia',
+    'matthew',
+    'mark',
+    'fenglian',
+    'sam',
+    'james',
+    'nick',
+    'caroline',
+    'rachel',
+    'john',
+    'rob',
+    'tom',
+    'paul',
+    'ed',
+    'dave',
+    'anthony',
+    'toby',
+    'ant',
+    'matt',
+    'anna'
   ];
   const vehicles = {
     Arium: {
       Nova: [
         {
-          vin: "156478954",
-          colour: "white",
-          vehicleStatus: "ACTIVE"
+          vin: '156478954',
+          colour: 'white',
+          vehicleStatus: 'ACTIVE'
         }
       ],
       Nebula: [
         {
-          vin: "652345894",
-          colour: "blue",
-          vehicleStatus: "ACTIVE"
+          vin: '652345894',
+          colour: 'blue',
+          vehicleStatus: 'ACTIVE'
         }
       ]
     },
     Morde: {
       Putt: [
         {
-          vin: "6437956437",
-          colour: "black",
-          vehicleStatus: "ACTIVE",
-          suspiciousMessage: "Mileage anomaly"
+          vin: '6437956437',
+          colour: 'black',
+          vehicleStatus: 'ACTIVE',
+          suspiciousMessage: 'Mileage anomaly'
         },
         {
-          vin: "857642213",
-          colour: "red",
-          vehicleStatus: "ACTIVE"
+          vin: '857642213',
+          colour: 'red',
+          vehicleStatus: 'ACTIVE'
         },
         {
-          vin: "542376495",
-          colour: "silver",
-          vehicleStatus: "ACTIVE"
+          vin: '542376495',
+          colour: 'silver',
+          vehicleStatus: 'ACTIVE'
         }
       ],
       Pluto: [
         {
-          vin: "976431649",
-          colour: "white",
-          vehicleStatus: "ACTIVE"
+          vin: '976431649',
+          colour: 'white',
+          vehicleStatus: 'ACTIVE'
         },
         {
-          vin: "564215468",
-          colour: "green",
-          vehicleStatus: "ACTIVE",
-          suspiciousMessage: "Insurance write-off but still active"
+          vin: '564215468',
+          colour: 'green',
+          vehicleStatus: 'ACTIVE',
+          suspiciousMessage: 'Insurance write-off but still active'
         },
         {
-          vin: "784512464",
-          colour: "grey",
-          vehicleStatus: "ACTIVE"
+          vin: '784512464',
+          colour: 'grey',
+          vehicleStatus: 'ACTIVE'
         }
       ]
     },
     Ridge: {
       Cannon: [
         {
-          vin: "457645764",
-          colour: "red",
-          vehicleStatus: "ACTIVE"
+          vin: '457645764',
+          colour: 'red',
+          vehicleStatus: 'ACTIVE'
         },
         {
-          vin: "312457645",
-          colour: "white",
-          vehicleStatus: "ACTIVE",
-          suspiciousMessage: "Suspicious ownership sequence"
+          vin: '312457645',
+          colour: 'white',
+          vehicleStatus: 'ACTIVE',
+          suspiciousMessage: 'Suspicious ownership sequence'
         },
         {
-          vin: "65235647",
-          colour: "silver",
-          vehicleStatus: "ACTIVE",
-          suspiciousMessage: "Untaxed vehicle"
+          vin: '65235647',
+          colour: 'silver',
+          vehicleStatus: 'ACTIVE',
+          suspiciousMessage: 'Untaxed vehicle'
         }
       ],
       Rancher: [
         {
-          vin: "85654575",
-          colour: "blue",
-          vehicleStatus: "ACTIVE"
+          vin: '85654575',
+          colour: 'blue',
+          vehicleStatus: 'ACTIVE'
         },
         {
-          vin: "326548754",
-          colour: "white",
-          vehicleStatus: "ACTIVE",
-          suspiciousMessage: "Uninsured vehicle"
+          vin: '326548754',
+          colour: 'white',
+          vehicleStatus: 'ACTIVE',
+          suspiciousMessage: 'Uninsured vehicle'
         }
       ]
     }
@@ -146,25 +148,25 @@ async function setupDemo(setupDemo) {
 
   // register manufacturers
   const manufacturers = Object.keys(vehicles).map(name => {
-    return factory.newResource(NS_M, "Manufacturer", name);
+    return factory.newResource(NS_M, 'Manufacturer', name);
   });
   const manufacturerRegistry = await getParticipantRegistry(
-    NS_M + ".Manufacturer"
+    NS_M + '.Manufacturer'
   );
   await manufacturerRegistry.addAll(manufacturers);
 
   // register private owners
   const privateOwners = names.map(name => {
-    return factory.newResource(NS, "PrivateOwner", name);
+    return factory.newResource(NS, 'PrivateOwner', name);
   });
   const privateOwnerRegistry = await getParticipantRegistry(
-    NS + ".PrivateOwner"
+    NS + '.PrivateOwner'
   );
   await privateOwnerRegistry.addAll(privateOwners);
 
   // register regulator
-  const regulator = factory.newResource(NS, "Regulator", "regulator");
-  const regulatorRegistry = await getParticipantRegistry(NS + ".Regulator");
+  const regulator = factory.newResource(NS, 'Regulator', 'regulator');
+  const regulatorRegistry = await getParticipantRegistry(NS + '.Regulator');
   await regulatorRegistry.add(regulator);
 
   // register vehicles
@@ -178,16 +180,16 @@ async function setupDemo(setupDemo) {
         const vehicleTemplate = model[i];
         const vehicle = factory.newResource(
           NS_D,
-          "Vehicle",
+          'Vehicle',
           vehicleTemplate.vin
         );
         vehicle.owner = factory.newRelationship(
           NS,
-          "PrivateOwner",
+          'PrivateOwner',
           names[carCount]
         );
         vehicle.vehicleStatus = vehicleTemplate.vehicleStatus;
-        vehicle.vehicleDetails = factory.newConcept(NS_D, "VehicleDetails");
+        vehicle.vehicleDetails = factory.newConcept(NS_D, 'VehicleDetails');
         vehicle.vehicleDetails.make = mName;
         vehicle.vehicleDetails.modelType = mModel;
         vehicle.vehicleDetails.colour = vehicleTemplate.colour;
@@ -201,15 +203,15 @@ async function setupDemo(setupDemo) {
           vehicle.logEntries = [];
         }
 
-        const logEntry = factory.newConcept(NS_D, "VehicleTransferLogEntry");
+        const logEntry = factory.newConcept(NS_D, 'VehicleTransferLogEntry');
         logEntry.vehicle = factory.newRelationship(
           NS_D,
-          "Vehicle",
+          'Vehicle',
           vehicleTemplate.vin
         );
         logEntry.buyer = factory.newRelationship(
           NS,
-          "PrivateOwner",
+          'PrivateOwner',
           names[carCount]
         );
         logEntry.timestamp = setupDemo.timestamp;
@@ -221,6 +223,6 @@ async function setupDemo(setupDemo) {
       }
     }
   }
-  const vehicleRegistry = await getAssetRegistry(NS_D + ".Vehicle");
+  const vehicleRegistry = await getAssetRegistry(NS_D + '.Vehicle');
   await vehicleRegistry.addAll(vs);
 }

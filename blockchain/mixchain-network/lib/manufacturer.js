@@ -13,6 +13,7 @@
  */
 
 /* global getFactory getAssetRegistry emit */
+'use strict';
 
 /**
  * Place an order for a vehicle
@@ -21,26 +22,26 @@
  */
 async function placeOrder(placeOrder) {
   // eslint-disable-line no-unused-vars
-  console.log("placeOrder");
+  console.log('placeOrder');
 
   const factory = getFactory();
-  const NS_M = "org.acme.vehicle.lifecycle.manufacturer";
-  const NS = "org.acme.vehicle.lifecycle";
+  const NS_M = 'org.acme.vehicle.lifecycle.manufacturer';
+  const NS = 'org.acme.vehicle.lifecycle';
 
-  const order = factory.newResource(NS_M, "Order", placeOrder.orderId);
+  const order = factory.newResource(NS_M, 'Order', placeOrder.orderId);
   order.vehicleDetails = placeOrder.vehicleDetails;
-  order.orderStatus = "PLACED";
+  order.orderStatus = 'PLACED';
   order.manufacturer = placeOrder.manufacturer;
   order.orderer = factory.newRelationship(
     NS,
-    "PrivateOwner",
+    'PrivateOwner',
     placeOrder.orderer.getIdentifier()
   );
 
   // save the order
   const registry = await getAssetRegistry(order.getFullyQualifiedType());
   await registry.add(order);
-  const placeOrderEvent = factory.newEvent(NS_M, "PlaceOrderEvent");
+  const placeOrderEvent = factory.newEvent(NS_M, 'PlaceOrderEvent');
   placeOrderEvent.orderId = order.orderId;
   placeOrderEvent.vehicleDetails = order.vehicleDetails;
   emit(placeOrderEvent);
@@ -53,51 +54,51 @@ async function placeOrder(placeOrder) {
  */
 async function updateOrderStatus(updateOrderStatus) {
   // eslint-disable-line no-unused-vars
-  console.log("updateOrderStatus");
+  console.log('updateOrderStatus');
 
   const factory = getFactory();
-  const NS_M = "org.acme.vehicle.lifecycle.manufacturer";
-  const NS = "org.acme.vehicle.lifecycle";
-  const NS_D = "org.vda";
+  const NS_M = 'org.acme.vehicle.lifecycle.manufacturer';
+  const NS = 'org.acme.vehicle.lifecycle';
+  const NS_D = 'org.vda';
 
   // save the new status of the order
   updateOrderStatus.order.orderStatus = updateOrderStatus.orderStatus;
 
   // get vehicle registry
-  const registry = await getAssetRegistry(NS_D + ".Vehicle");
-  if (updateOrderStatus.orderStatus === "VIN_ASSIGNED") {
-    const vehicle = factory.newResource(NS_D, "Vehicle", updateOrderStatus.vin);
+  const registry = await getAssetRegistry(NS_D + '.Vehicle');
+  if (updateOrderStatus.orderStatus === 'VIN_ASSIGNED') {
+    const vehicle = factory.newResource(NS_D, 'Vehicle', updateOrderStatus.vin);
     vehicle.vehicleDetails = updateOrderStatus.order.vehicleDetails;
     vehicle.vehicleDetails.vin = updateOrderStatus.vin;
-    vehicle.vehicleStatus = "OFF_THE_ROAD";
+    vehicle.vehicleStatus = 'OFF_THE_ROAD';
     return registry.add(vehicle);
-  } else if (updateOrderStatus.orderStatus === "OWNER_ASSIGNED") {
+  } else if (updateOrderStatus.orderStatus === 'OWNER_ASSIGNED') {
     if (!updateOrderStatus.order.orderer.vehicles) {
       updateOrderStatus.order.orderer.vehicles = [];
     }
 
     const vehicle = await registry.get(updateOrderStatus.vin);
-    vehicle.vehicleStatus = "ACTIVE";
+    vehicle.vehicleStatus = 'ACTIVE';
     vehicle.owner = factory.newRelationship(
-      "org.acme.vehicle.lifecycle",
-      "PrivateOwner",
+      'org.acme.vehicle.lifecycle',
+      'PrivateOwner',
       updateOrderStatus.order.orderer.email
     );
-    vehicle.numberPlate = updateOrderStatus.numberPlate || "";
-    vehicle.vehicleDetails.numberPlate = updateOrderStatus.numberPlate || "";
-    vehicle.vehicleDetails.v5c = updateOrderStatus.v5c || "";
+    vehicle.numberPlate = updateOrderStatus.numberPlate || '';
+    vehicle.vehicleDetails.numberPlate = updateOrderStatus.numberPlate || '';
+    vehicle.vehicleDetails.v5c = updateOrderStatus.v5c || '';
     if (!vehicle.logEntries) {
       vehicle.logEntries = [];
     }
-    const logEntry = factory.newConcept(NS_D, "VehicleTransferLogEntry");
+    const logEntry = factory.newConcept(NS_D, 'VehicleTransferLogEntry');
     logEntry.vehicle = factory.newRelationship(
       NS_D,
-      "Vehicle",
+      'Vehicle',
       updateOrderStatus.vin
     );
     logEntry.buyer = factory.newRelationship(
       NS,
-      "PrivateOwner",
+      'PrivateOwner',
       updateOrderStatus.order.orderer.email
     );
     logEntry.timestamp = updateOrderStatus.timestamp;
@@ -109,8 +110,8 @@ async function updateOrderStatus(updateOrderStatus) {
   const orderRegistry = await getAssetRegistry(
     updateOrderStatus.order.getFullyQualifiedType()
   );
-  // update order status
-  updateOrderStatus.order.vehicleDetails.vin = updateOrderStatus.vin || "";
+    // update order status
+  updateOrderStatus.order.vehicleDetails.vin = updateOrderStatus.vin || '';
 
   if (!updateOrderStatus.order.statusUpdates) {
     updateOrderStatus.order.statusUpdates = [];
@@ -121,7 +122,7 @@ async function updateOrderStatus(updateOrderStatus) {
   await orderRegistry.update(updateOrderStatus.order);
   const updateOrderStatusEvent = factory.newEvent(
     NS_M,
-    "UpdateOrderStatusEvent"
+    'UpdateOrderStatusEvent'
   );
   updateOrderStatusEvent.orderStatus = updateOrderStatus.order.orderStatus;
   updateOrderStatusEvent.order = updateOrderStatus.order;

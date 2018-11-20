@@ -13,6 +13,7 @@
  */
 
 /* global getFactory getAssetRegistry emit query */
+'use strict';
 
 /**
  * Transfer a vehicle to another private owner
@@ -21,10 +22,10 @@
  */
 async function privateVehicleTransfer(privateVehicleTransfer) {
   // eslint-disable-line no-unused-vars
-  console.log("privateVehicleTransfer");
+  console.log('privateVehicleTransfer');
 
-  const NS = "org.acme.vehicle.lifecycle";
-  const NS_D = "org.vda";
+  const NS = 'org.acme.vehicle.lifecycle';
+  const NS_D = 'org.vda';
   const factory = getFactory();
 
   const seller = privateVehicleTransfer.seller;
@@ -37,21 +38,21 @@ async function privateVehicleTransfer(privateVehicleTransfer) {
   //PrivateVehicleTransaction for log
   const vehicleTransferLogEntry = factory.newConcept(
     NS_D,
-    "VehicleTransferLogEntry"
+    'VehicleTransferLogEntry'
   );
   vehicleTransferLogEntry.vehicle = factory.newRelationship(
     NS_D,
-    "Vehicle",
+    'Vehicle',
     vehicle.getIdentifier()
   );
   vehicleTransferLogEntry.seller = factory.newRelationship(
     NS,
-    "PrivateOwner",
+    'PrivateOwner',
     seller.getIdentifier()
   );
   vehicleTransferLogEntry.buyer = factory.newRelationship(
     NS,
-    "PrivateOwner",
+    'PrivateOwner',
     buyer.getIdentifier()
   );
   vehicleTransferLogEntry.timestamp = privateVehicleTransfer.timestamp;
@@ -72,13 +73,13 @@ async function privateVehicleTransfer(privateVehicleTransfer) {
  */
 async function scrapVehicle(scrapVehicle) {
   // eslint-disable-line no-unused-vars
-  console.log("scrapVehicle");
+  console.log('scrapVehicle');
 
-  const NS_D = "org.vda";
+  const NS_D = 'org.vda';
 
-  const assetRegistry = await getAssetRegistry(NS_D + ".Vehicle");
+  const assetRegistry = await getAssetRegistry(NS_D + '.Vehicle');
   const vehicle = await assetRegistry.get(scrapVehicle.vehicle.getIdentifier());
-  vehicle.vehicleStatus = "SCRAPPED";
+  vehicle.vehicleStatus = 'SCRAPPED';
   await assetRegistry.update(vehicle);
 }
 
@@ -89,21 +90,21 @@ async function scrapVehicle(scrapVehicle) {
  */
 async function scrapAllVehiclesByColour(scrapAllVehicles) {
   // eslint-disable-line no-unused-vars
-  console.log("scrapAllVehiclesByColour");
+  console.log('scrapAllVehiclesByColour');
 
-  const NS_D = "org.vda";
-  const assetRegistry = await getAssetRegistry(NS_D + ".Vehicle");
-  const vehicles = await query("selectAllCarsByColour", {
+  const NS_D = 'org.vda';
+  const assetRegistry = await getAssetRegistry(NS_D + '.Vehicle');
+  const vehicles = await query('selectAllCarsByColour', {
     colour: scrapAllVehicles.colour
   });
   if (vehicles.length >= 1) {
     const factory = getFactory();
     const vehiclesToScrap = vehicles.filter(function(vehicle) {
-      return vehicle.vehicleStatus !== "SCRAPPED";
+      return vehicle.vehicleStatus !== 'SCRAPPED';
     });
     for (let x = 0; x < vehiclesToScrap.length; x++) {
-      vehiclesToScrap[x].vehicleStatus = "SCRAPPED";
-      const scrapVehicleEvent = factory.newEvent(NS_D, "ScrapVehicleEvent");
+      vehiclesToScrap[x].vehicleStatus = 'SCRAPPED';
+      const scrapVehicleEvent = factory.newEvent(NS_D, 'ScrapVehicleEvent');
       scrapVehicleEvent.vehicle = vehiclesToScrap[x];
       emit(scrapVehicleEvent);
     }

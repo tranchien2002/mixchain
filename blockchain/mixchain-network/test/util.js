@@ -12,26 +12,26 @@
  * limitations under the License.
  */
 
-"use strict";
+'use strict';
 
-const AdminConnection = require("composer-admin").AdminConnection;
-const BusinessNetworkConnection = require("composer-client")
+const AdminConnection = require('composer-admin').AdminConnection;
+const BusinessNetworkConnection = require('composer-client')
   .BusinessNetworkConnection;
 const {
   BusinessNetworkDefinition,
   CertificateUtil,
   IdCard
-} = require("composer-common");
-const path = require("path");
+} = require('composer-common');
+const path = require('path');
 
-const NS = "org.acme.vehicle.lifecycle";
-const NS_M = "org.acme.vehicle.lifecycle.manufacturer";
-const NS_D = "org.vda";
+const NS = 'org.acme.vehicle.lifecycle';
+const NS_M = 'org.acme.vehicle.lifecycle.manufacturer';
+const NS_D = 'org.vda';
 
-const cardStore = require("composer-common").NetworkCardStoreManager.getCardStore(
-  { type: "composer-wallet-inmemory" }
+const cardStore = require('composer-common').NetworkCardStoreManager.getCardStore(
+  { type: 'composer-wallet-inmemory' }
 );
-const adminCardName = "admin";
+const adminCardName = 'admin';
 
 let adminConnection;
 
@@ -49,7 +49,7 @@ module.exports.createAsset = async (
   resource
 ) => {
   const registry = await businessNetworkConnection.getAssetRegistry(
-    NS + "." + type
+    NS + '.' + type
   );
   await registry.add(resource);
 };
@@ -68,7 +68,7 @@ module.exports.createParticipant = async (
   resource
 ) => {
   const registry = await businessNetworkConnection.getParticipantRegistry(
-    NS + "." + resource.getIdentifier()
+    NS + '.' + resource.getIdentifier()
   );
   await registry.add(resource);
 };
@@ -79,32 +79,32 @@ module.exports.createParticipant = async (
  */
 module.exports.setup = async businessNetworkConnection => {
   const factory = businessNetworkConnection.getBusinessNetwork().getFactory();
-  const p1 = factory.newResource(NS, "PrivateOwner", "dan");
-  const p2 = factory.newResource(NS, "PrivateOwner", "simon");
-  const m1 = factory.newResource(NS_M, "Manufacturer", "manufacturer");
+  const p1 = factory.newResource(NS, 'PrivateOwner', 'dan');
+  const p2 = factory.newResource(NS, 'PrivateOwner', 'simon');
+  const m1 = factory.newResource(NS_M, 'Manufacturer', 'manufacturer');
 
-  const v = factory.newResource(NS_D, "Vehicle", "123456789");
-  v.owner = factory.newRelationship(NS, "PrivateOwner", "dan");
-  v.vehicleStatus = "ACTIVE";
-  v.numberPlate = "NUMBER";
-  v.vehicleDetails = factory.newConcept(NS_D, "VehicleDetails");
-  v.vehicleDetails.make = "Doge";
-  v.vehicleDetails.modelType = "Much Wow";
-  v.vehicleDetails.colour = "Beige";
-  v.vehicleDetails.vin = "123456789";
+  const v = factory.newResource(NS_D, 'Vehicle', '123456789');
+  v.owner = factory.newRelationship(NS, 'PrivateOwner', 'dan');
+  v.vehicleStatus = 'ACTIVE';
+  v.numberPlate = 'NUMBER';
+  v.vehicleDetails = factory.newConcept(NS_D, 'VehicleDetails');
+  v.vehicleDetails.make = 'Doge';
+  v.vehicleDetails.modelType = 'Much Wow';
+  v.vehicleDetails.colour = 'Beige';
+  v.vehicleDetails.vin = '123456789';
 
   const pr = await businessNetworkConnection.getParticipantRegistry(
-    NS + ".PrivateOwner"
+    NS + '.PrivateOwner'
   );
   await pr.addAll([p1, p2]);
 
   const mr = await businessNetworkConnection.getParticipantRegistry(
-    NS_M + ".Manufacturer"
+    NS_M + '.Manufacturer'
   );
   await mr.addAll([m1]);
 
   const vr = await businessNetworkConnection.getAssetRegistry(
-    NS_D + ".Vehicle"
+    NS_D + '.Vehicle'
   );
   await vr.addAll([v]);
 };
@@ -112,15 +112,15 @@ module.exports.setup = async businessNetworkConnection => {
 module.exports.deployAndConnect = async () => {
   const adminConnection = await getAdminConnection();
   const businessNetworkDefinition = await BusinessNetworkDefinition.fromDirectory(
-    path.resolve(__dirname, "..")
+    path.resolve(__dirname, '..')
   );
 
   await adminConnection.install(businessNetworkDefinition);
   const startOptions = {
     networkAdmins: [
       {
-        userName: "admin",
-        enrollmentSecret: "adminpw"
+        userName: 'admin',
+        enrollmentSecret: 'adminpw'
       }
     ]
   };
@@ -129,7 +129,7 @@ module.exports.deployAndConnect = async () => {
     businessNetworkDefinition.getVersion(),
     startOptions
   );
-  await adminConnection.importCard(adminCardName, adminCards.get("admin"));
+  await adminConnection.importCard(adminCardName, adminCards.get('admin'));
 
   const businessNetworkConnection = new BusinessNetworkConnection({
     cardStore: cardStore
@@ -148,20 +148,20 @@ async function getAdminConnection() {
   }
 
   const connectionProfile = {
-    name: "embedded",
-    "x-type": "embedded"
+    name: 'embedded',
+    'x-type': 'embedded'
   };
-  const credentials = CertificateUtil.generate({ commonName: "admin" });
+  const credentials = CertificateUtil.generate({ commonName: 'admin' });
 
   const deployerMetadata = {
     version: 1,
-    userName: "PeerAdmin",
-    roles: ["PeerAdmin", "ChannelAdmin"]
+    userName: 'PeerAdmin',
+    roles: ['PeerAdmin', 'ChannelAdmin']
   };
   const deployerCard = new IdCard(deployerMetadata, connectionProfile);
   deployerCard.setCredentials(credentials);
 
-  const deployerCardName = "deployer";
+  const deployerCardName = 'deployer';
 
   adminConnection = new AdminConnection({ cardStore: cardStore });
 

@@ -12,15 +12,15 @@
  * limitations under the License.
  */
 
-"use strict";
+'use strict';
 
-const Util = require("./util");
+const Util = require('./util');
 
-const NS = "org.acme.vehicle.lifecycle";
-const NS_M = "org.acme.vehicle.lifecycle.manufacturer";
-const NS_D = "org.vda";
+const NS = 'org.acme.vehicle.lifecycle';
+const NS_M = 'org.acme.vehicle.lifecycle.manufacturer';
+const NS_D = 'org.vda';
 
-describe("Setup", () => {
+describe('Setup', () => {
   let businessNetworkConnection;
   let factory;
 
@@ -29,47 +29,47 @@ describe("Setup", () => {
     factory = businessNetworkConnection.getBusinessNetwork().getFactory();
   });
 
-  describe("Setup", () => {
-    describe("#setupDemo", () => {
+  describe('Setup', () => {
+    describe('#setupDemo', () => {
       /**
        *
        * @param {String} registry - name of a registry
        */
       async function getAllFromRegistry(type, registry) {
-        const func = "get" + type + "Registry";
+        const func = 'get' + type + 'Registry';
         const bnc = await businessNetworkConnection[func](registry);
         return await bnc.getAll();
       }
 
-      it("should create a scenario", async () => {
+      it('should create a scenario', async () => {
         // submit the transaction
-        const setupDemo = factory.newTransaction(NS, "SetupDemo");
+        const setupDemo = factory.newTransaction(NS, 'SetupDemo');
 
         await businessNetworkConnection.submitTransaction(setupDemo);
 
         // (participants) get regulator registry
         const regulators = await getAllFromRegistry(
-          "Participant",
-          NS + ".Regulator"
+          'Participant',
+          NS + '.Regulator'
         );
         regulators.length.should.equal(1);
 
         // (participants) get manufacturer registry
         const manufacturers = await getAllFromRegistry(
-          "Participant",
-          NS_M + ".Manufacturer"
+          'Participant',
+          NS_M + '.Manufacturer'
         );
         manufacturers.length.should.be.above(1);
 
         // (participants) get private owner registry
         const privateOwners = await getAllFromRegistry(
-          "Participant",
-          NS + ".PrivateOwner"
+          'Participant',
+          NS + '.PrivateOwner'
         );
         privateOwners.length.should.be.above(10);
 
         // (assets) get vehicles registry
-        const vehicles = await getAllFromRegistry("Asset", NS_D + ".Vehicle");
+        const vehicles = await getAllFromRegistry('Asset', NS_D + '.Vehicle');
         vehicles.length.should.be.above(10);
       });
     });
