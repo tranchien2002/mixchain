@@ -37,5 +37,8 @@ participant AuctionHouse extends Company {
 participant ScrapMerchant extends Company {
 }
 
+participant RepairShop extends Company {
+}
+
 transaction SetupDemo  {
 }
