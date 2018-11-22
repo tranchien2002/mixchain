@@ -31,7 +31,6 @@ enum OrderStatus {
   o VIN_ASSIGNED
   o OWNER_ASSIGNED
   o DELIVERED
-  o REPAIRING
 }
 
 /**

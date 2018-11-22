@@ -18,6 +18,8 @@
 namespace org.vda
 
 import composer.base.Person
+import composer.base.Person
+import org.acme.vehicle.lifecycle.RepairShop
 
 /**
  * Based on DVLA document V355/1
@@ -101,6 +103,15 @@ concept VehicleTransferLogEntry {
   o DateTime timestamp
 }
 
+concept VehicleRepairLogEntry {
+  --> Vehicle vehicle
+  --> RepairShop shop
+  --> Person customer
+  --> Person repairer
+  o String description
+  o DateTime timestamp
+}
+
 /**
  * Based on the DVLA V62 document
  */
@@ -130,6 +141,7 @@ enum VehicleStatus {
   o ACTIVE
   o OFF_THE_ROAD
   o SCRAPPED
+  o REPAIRING
 }
 
 asset Vehicle identified by vin {
@@ -140,6 +152,7 @@ asset Vehicle identified by vin {
   o String numberPlate optional
   o String suspiciousMessage optional
   o VehicleTransferLogEntry[] logEntries optional
+  o VehicleRepairLogEntry[] repairLogEntries optional
 }
 
 transaction ScrapVehicle extends VehicleTransaction {
@@ -159,7 +172,10 @@ event ScrapVehicleEvent {
 }
 
 transaction RepairVehicle extends VehicleTransaction {
-  o String detail
+  --> Person repairer
+  --> Person customer
+  --> RepairShop shop
+  o String description optional
 }
 
 event RepairVehicleEvent {

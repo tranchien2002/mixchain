@@ -111,3 +111,80 @@ async function scrapAllVehiclesByColour(scrapAllVehicles) {
     await assetRegistry.updateAll(vehiclesToScrap);
   }
 }
+
+/**
+ * Repair a vehicle
+ * @param {org.vda.RepairVehicle} repairVehicle - the RepairVehicle transaction
+ * @transaction
+ */
+async function repairVehicle(repairVehicle) {
+  // eslint-disable-line no-unused-vars
+  console.log('repairVehicle');
+
+  const NS_D = 'org.vda';
+  const NS = 'org.acme.vehicle.lifecycle';
+  const factory = getFactory();
+
+  const assetRegistry = await getAssetRegistry(NS_D + '.Vehicle');
+  const vehicle = await assetRegistry.get(repairVehicle.vehicle.getIdentifier());
+  vehicle.vehicleStatus = 'REPAIRING';
+
+  const shop = repairVehicle.shop;
+  const repairer = repairVehicle.repairer;
+  const customer = repairVehicle.customer;
+  //VehicleRepairTransaction for log
+  const vehicleRepairLogEntry = factory.newConcept(
+    NS_D,
+    'VehicleRepairLogEntry'
+  );
+  vehicleRepairLogEntry.vehicle = factory.newRelationship(
+    NS_D,
+    'Vehicle',
+    vehicle.getIdentifier()
+  );
+  vehicleRepairLogEntry.shop = factory.newRelationship(
+    NS,
+    'RepairShop',
+    shop.getIdentifier()
+  );
+  vehicleRepairLogEntry.repairer = factory.newRelationship(
+    NS,
+    'PrivateOwner',
+    repairer.getIdentifier()
+  );
+  vehicleRepairLogEntry.customer = factory.newRelationship(
+    NS,
+    'PrivateOwner',
+    customer.getIdentifier()
+  );
+  vehicleRepairLogEntry.timestamp = repairVehicle.timestamp;
+  vehicleRepairLogEntry.description = repairVehicle.description;
+  if (!vehicle.logEntries) {
+    vehicle.logEntries = [];
+  }
+
+  vehicle.reapairLogEntries.push(vehicleRepairLogEntry);
+
+  await assetRegistry.update(vehicle);
+
+  const repairVehicleEvent = factory.newEvent(NS_D, 'RepairVehicleEvent');
+  repairVehicleEvent.vehicle = vehicle;
+  emit(repairVehicleEvent);
+}
+
+/**
+ * Repair a vehicle
+ * @param {org.vda.RepairVehicle} repairVehicle - the RepairVehicle transaction
+ * @transaction
+ */
+async function repairVehicleComplete(repairVehicle) {
+  // eslint-disable-line no-unused-vars
+  console.log('repairVehicle');
+
+  const NS_D = 'org.vda';
+
+  const assetRegistry = await getAssetRegistry(NS_D + '.Vehicle');
+  const vehicle = await assetRegistry.get(repairVehicle.vehicle.getIdentifier());
+  vehicle.vehicleStatus = 'ACTIVE';
+  await assetRegistry.update(vehicle);
+}
