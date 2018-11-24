@@ -179,7 +179,7 @@ async function repairVehicle(repairVehicle) {
  */
 async function repairVehicleComplete(repairVehicle) {
   // eslint-disable-line no-unused-vars
-  console.log('repairVehicle');
+  console.log('repairVehicleComplete');
 
   const NS_D = 'org.vda';
 
