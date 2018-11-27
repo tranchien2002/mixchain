@@ -12,28 +12,9 @@
  * limitations under the License.
  */
 
-query selectMembers {
-  description: "Select all members"
-  statement:
-      SELECT org.clp.biznet.Member
+query selectAllCarsByColour {
+    description: "Select all cars based on their colour"
+    statement:
+        SELECT org.vda.Vehicle
+            WHERE (vehicleDetails.colour==_$colour)
 }
-
-
-query selectPartners {
-  description: "Select all partners"
-  statement:
-      SELECT org.clp.biznet.Partner
-}
-
-query selectEarnPoints {
-  description: "Select all points earned transactions"
-  statement:
-      SELECT org.clp.biznet.EarnPoints
-}
-
-query selectUsePoints {
-  description: "Select all points earned transactions"
-  statement:
-      SELECT org.clp.biznet.UsePoints
-}
-

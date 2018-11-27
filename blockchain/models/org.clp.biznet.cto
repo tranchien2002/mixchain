@@ -12,28 +12,35 @@
  * limitations under the License.
  */
 
-query selectMembers {
-  description: "Select all members"
-  statement:
-      SELECT org.clp.biznet.Member
+namespace org.clp.biznet
+
+//members identified by email
+participant Member identified by accountNumber {
+  o String accountNumber
+  o String firstName
+  o String lastName
+  o String phoneNumber
+  o String email
+  o Integer points
 }
 
-
-query selectPartners {
-  description: "Select all partners"
-  statement:
-      SELECT org.clp.biznet.Partner
+//partner identified by id
+participant Partner identified by id {
+  o String id
+  o String name
 }
 
-query selectEarnPoints {
-  description: "Select all points earned transactions"
-  statement:
-      SELECT org.clp.biznet.EarnPoints
+//points earned
+transaction EarnPoints {
+    o Integer points
+    --> Partner partner
+    --> Member member    
 }
 
-query selectUsePoints {
-  description: "Select all points earned transactions"
-  statement:
-      SELECT org.clp.biznet.UsePoints
+//points spent
+transaction UsePoints {
+    o Integer points
+    --> Partner partner  
+    --> Member member
 }
 
