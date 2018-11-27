@@ -155,3 +155,29 @@ async function RepairEnd(repairEnd) {
     throw new Error('Partner does not exist - check partner id');
   }
 }
+
+/**
+ * UpdateMetric transaction
+ * @param {com.mixchain.UpdateMetric} updateMetric
+ * @transaction
+ */
+async function UpdateMetric(updateMetric) {
+  console.log('UpdateMetric')
+
+  const assetRegistry = await getAssetRegistry('com.mixchain.Vehicle');
+  const vehicle = await assetRegistry.get(updateMetric.vehicle.getIdentifier());
+
+  const vehicleMetricLogEntry = factory.newConcept('com.mixchain.VehicleMetricLogEntry');
+  vehicleMetricLogEntry.vehicle = factory.newRelationship(
+    'com.mixchain.Vehicle',
+    vehicle.getIdentifier()
+  );
+  vehicleMetricLogEntry.timestamp = updateMetric.timestamp;
+  vehicleMetricLogEntry.fuelUsed = updateMetric.fuelUsed;
+  vehicleMetricLogEntry.tirePressure = updateMetric.tirePressure;
+  if (!vehicle.logEntries) {
+    vehicle.logEntries = [];
+  }
+  vehicle.reapairLogEntries.push(vehicleMetricLogEntry);
+  await assetRegistry.update(vehicle);
+}

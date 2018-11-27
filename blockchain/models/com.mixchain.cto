@@ -38,6 +38,13 @@ concept VehicleRepairLogEntry {
   o String type
 }
 
+concept VehicleMetricLogEntry {
+  --> Vehicle vehicle
+  o DateTime timestamp
+  o Double fuelUsed
+  o Double tirePressure
+}
+
 enum VehicleStatus {
   o ACTIVE
   o REPAIRING
@@ -58,6 +65,7 @@ asset Vehicle identified by vin {
   o VehicleStatus vehicleStatus
   o String numberPlate optional
   o VehicleRepairLogEntry[] repairLogEntries optional
+  o VehicleMetricLogEntry[] metricLogEntries optional
 }
 
 transaction RepairBegin {
@@ -73,6 +81,12 @@ transaction RepairEnd {
   --> Partner shop
   o String description optional
   o Integer points
+}
+
+transaction UpdateMetric {
+  --> Vehicle vehicle
+  o Double fuelUsed
+  o Double tirePressure
 }
 
 //points earned
