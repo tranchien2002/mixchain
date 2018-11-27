@@ -67,3 +67,91 @@ async function UsePoints(usePoints) {
     throw new Error('Partner does not exist - check id');
   }
 }
+
+
+/**
+ * RepairBegin transaction
+ * @param {com.mixchain.RepairBegin} repairBegin
+ * @transaction
+ */
+async function RepairBegin(repairBegin) {
+  console.log('RepairBegin');
+
+  // update status
+  const assetRegistry = await getAssetRegistry('com.mixchain.Vehicle');
+  const vehicle = await assetRegistry.get(repairBegin.vehicle.getIdentifier());
+  vehicle.vehicleStatus = 'REPAIRING';
+
+  // log
+  const shop = repairBegin.shop;
+  const vehicleRepairLogEntry = factory.newConcept('com.mixchain.VehicleRepairLogEntry');
+  vehicleRepairLogEntry.vehicle = factory.newRelationship(
+    'com.mixchain.Vehicle',
+    vehicle.getIdentifier()
+  );
+  vehicleRepairLogEntry.shop = factory.newRelationship(
+    'com.mixchain.Partner',
+    shop.getIdentifier()
+  );
+  vehicleRepairLogEntry.timestamp = repairBegin.timestamp;
+  vehicleRepairLogEntry.description = repairBegin.description;
+  vehicleRepairLogEntry.type = "begin";
+  if (!vehicle.logEntries) {
+    vehicle.logEntries = [];
+  }
+  vehicle.reapairLogEntries.push(vehicleRepairLogEntry);
+  await assetRegistry.update(vehicle);
+
+  // check if partner exists on the network
+  const partnerRegistry = await getParticipantRegistry('com.mixchain.Partner');
+  let partnerExists = await partnerRegistry.exists(repairBegin.shop.id);
+  if (partnerExists === false) {
+    throw new Error('Partner does not exist - check partner id');
+  }
+}
+
+/**
+ * RepairEnd transaction
+ * @param {com.mixchain.RepairEnd} repairEnd
+ * @transaction
+ */
+async function RepairEnd(repairEnd) {
+  console.log('RepairEnd');
+
+  // update status
+  const assetRegistry = await getAssetRegistry('com.mixchain.Vehicle');
+  const vehicle = await assetRegistry.get(repairEnd.vehicle.getIdentifier());
+  vehicle.vehicleStatus = 'ACTIVE';
+
+  // log
+  const shop = repairEnd.shop;
+  const vehicleRepairLogEntry = factory.newConcept('com.mixchain.VehicleRepairLogEntry');
+  vehicleRepairLogEntry.vehicle = factory.newRelationship(
+    'com.mixchain.Vehicle',
+    vehicle.getIdentifier()
+  );
+  vehicleRepairLogEntry.shop = factory.newRelationship(
+    'com.mixchain.Partner',
+    shop.getIdentifier()
+  );
+  vehicleRepairLogEntry.timestamp = repairEnd.timestamp;
+  vehicleRepairLogEntry.description = repairEnd.description;
+  vehicleRepairLogEntry.type = "end";
+  if (!vehicle.logEntries) {
+    vehicle.logEntries = [];
+  }
+  vehicle.reapairLogEntries.push(vehicleRepairLogEntry);
+  await assetRegistry.update(vehicle);
+
+  //update member points
+  repairEnd.vehicle.owner.points = repairEnd.vehicle.owner.points + repairEnd.points;
+  const memberRegistry = await getParticipantRegistry('com.mixchain.Member');
+  await memberRegistry.update(repairEnd.vehicle.owner);
+
+  // check if partner exists on the network
+  const partnerRegistry = await getParticipantRegistry('com.mixchain.Partner');
+  let partnerExists = await partnerRegistry.exists(repairEnd.shop.id);
+  if (partnerExists === false) {
+    throw new Error('Partner does not exist - check partner id');
+  }
+}

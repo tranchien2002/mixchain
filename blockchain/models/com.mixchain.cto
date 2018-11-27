@@ -30,6 +30,53 @@ participant Partner identified by id {
   o String name
 }
 
+concept VehicleRepairLogEntry {
+  --> Vehicle vehicle
+  --> Partner shop
+  o String description
+  o DateTime timestamp
+  o String type
+}
+
+enum VehicleStatus {
+  o ACTIVE
+  o REPAIRING
+}
+
+concept VehicleDetails {
+  o String make
+  o String modelType
+  o String colour
+  o String vin optional
+  o String numberPlate optional
+}
+
+asset Vehicle identified by vin {
+  o String vin
+  --> Member owner optional
+  o VehicleDetails vehicleDetails
+  o VehicleStatus vehicleStatus
+  o String numberPlate optional
+  o VehicleRepairLogEntry[] repairLogEntries optional
+}
+
+transaction RepairBegin {
+  o String detail
+  --> Vehicle vehicle
+  --> Partner shop
+  o String description optional
+  o DateTime timestamp
+}
+
+transaction RepairEnd {
+  o String detail
+  --> Vehicle vehicle
+  --> Partner shop
+  o String description optional
+  o DateTime timestamp
+  o Integer points
+}
+
 //points earned
 transaction EarnPoints {
     o Integer points
