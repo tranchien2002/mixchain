@@ -14,7 +14,7 @@ let adminConnection;
 //this is the business network connection the tests will use.
 let businessNetworkConnection;
 
-let businessNetworkName = 'clp-network';
+let businessNetworkName = 'mixchain-network';
 let factory;
 
 
@@ -27,7 +27,7 @@ async function importCardForIdentity(cardName, identity) {
 
   //use admin connection
   adminConnection = new AdminConnection();
-  businessNetworkName = 'clp-network';
+  businessNetworkName = 'mixchain-network';
 
   //declare metadata
   const metadata = {
@@ -78,7 +78,7 @@ module.exports = {
 
       //connect as admin
       businessNetworkConnection = new BusinessNetworkConnection();
-      await businessNetworkConnection.connect('admin@clp-network');
+      await businessNetworkConnection.connect('admin@mixchain-network');
 
       //get the factory for the business network
       factory = businessNetworkConnection.getBusinessNetwork().getFactory();
@@ -102,7 +102,7 @@ module.exports = {
       await importCardForIdentity(cardId, identity);
 
       //disconnect
-      await businessNetworkConnection.disconnect('admin@clp-network');
+      await businessNetworkConnection.disconnect('admin@mixchain-network');
 
       return true;
     }
@@ -128,7 +128,7 @@ module.exports = {
 
       //connect as admin
       businessNetworkConnection = new BusinessNetworkConnection();
-      await businessNetworkConnection.connect('admin@clp-network');
+      await businessNetworkConnection.connect('admin@mixchain-network');
 
       //get the factory for the business network.
       factory = businessNetworkConnection.getBusinessNetwork().getFactory();
@@ -148,7 +148,7 @@ module.exports = {
       await importCardForIdentity(cardId, identity);
 
       //disconnect
-      await businessNetworkConnection.disconnect('admin@clp-network');
+      await businessNetworkConnection.disconnect('admin@mixchain-network');
 
       return true;
     }
