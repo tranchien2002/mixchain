@@ -45,6 +45,13 @@ concept VehicleMetricLogEntry {
   o Double tirePressure
 }
 
+concept VehicleTransferLogEntry {
+  --> Vehicle vehicle
+  --> Member buyer
+  --> Member seller optional
+  o DateTime timestamp
+}
+
 enum VehicleStatus {
   o ACTIVE
   o REPAIRING
@@ -66,6 +73,7 @@ asset Vehicle identified by vin {
   o String numberPlate optional
   o VehicleRepairLogEntry[] repairLogEntries optional
   o VehicleMetricLogEntry[] metricLogEntries optional
+  o VehicleTransferLogEntry[] logEntries optional
 }
 
 transaction RepairBegin {
@@ -101,5 +109,12 @@ transaction UsePoints {
     o Integer points
     --> Partner partner  
     --> Member member
+}
+
+transaction PrivateVehicleTransfer {
+  --> Vehicle vehicle
+  --> Member seller
+  --> Member buyer
+  o String specialNotes optional
 }
 

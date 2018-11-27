@@ -182,5 +182,48 @@ async function UpdateMetric(updateMetric) {
   await assetRegistry.update(vehicle);
 }
 
+/**
+ * PrivateVehicleTransfer transaction
+ * @param {com.mixchain.UpdateMetric} privateVehicleTransfer
+ * @transaction
+ */
+async function privateVehicleTransfer(privateVehicleTransfer) {
+  // eslint-disable-line no-unused-vars
+  console.log('privateVehicleTransfer');
+
+  const seller = privateVehicleTransfer.seller;
+  const buyer = privateVehicleTransfer.buyer;
+  const vehicle = privateVehicleTransfer.vehicle;
+
+  //change vehicle owner
+  vehicle.owner = buyer;
+
+  //PrivateVehicleTransaction for log
+  const vehicleTransferLogEntry = factory.newConcept(
+    'com.mixchain.VehicleTransferLogEntry'
+  );
+  vehicleTransferLogEntry.vehicle = factory.newRelationship(
+    'com.mixchain.Vehicle',
+    vehicle.getIdentifier()
+  );
+  vehicleTransferLogEntry.seller = factory.newRelationship(
+    'com.mixchain.Member',
+    seller.getIdentifier()
+  );
+  vehicleTransferLogEntry.buyer = factory.newRelationship(
+    'com.mixchain.Member',
+    buyer.getIdentifier()
+  );
+  vehicleTransferLogEntry.timestamp = privateVehicleTransfer.timestamp;
+  if (!vehicle.logEntries) {
+    vehicle.logEntries = [];
+  }
+
+  vehicle.logEntries.push(vehicleTransferLogEntry);
+
+  const assetRegistry = await getAssetRegistry(vehicle.getFullyQualifiedType());
+  await assetRegistry.update(vehicle);
+}
+
 // TODO: check payment from api
 async function CheckPayment(tx) {}
