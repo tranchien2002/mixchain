@@ -65,7 +65,6 @@ transaction RepairBegin {
   --> Vehicle vehicle
   --> Partner shop
   o String description optional
-  o DateTime timestamp
 }
 
 transaction RepairEnd {
@@ -73,7 +72,6 @@ transaction RepairEnd {
   --> Vehicle vehicle
   --> Partner shop
   o String description optional
-  o DateTime timestamp
   o Integer points
 }
 
