@@ -181,3 +181,6 @@ async function UpdateMetric(updateMetric) {
   vehicle.reapairLogEntries.push(vehicleMetricLogEntry);
   await assetRegistry.update(vehicle);
 }
+
+// TODO: check payment from api
+async function CheckPayment(tx) {}
