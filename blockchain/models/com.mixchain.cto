@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-namespace org.clp.biznet
+namespace com.mixchain
 
 //members identified by email
 participant Member identified by accountNumber {

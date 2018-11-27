@@ -3,7 +3,7 @@ const BusinessNetworkConnection = require('composer-client').BusinessNetworkConn
 const { BusinessNetworkDefinition, CertificateUtil, IdCard } = require('composer-common');
 
 //declate namespace
-const namespace = 'org.clp.biznet';
+const namespace = 'com.mixchain';
 
 //in-memory card store for testing so cards are not persisted to the file system
 const cardStore = require('composer-common').NetworkCardStoreManager.getCardStore( { type: 'composer-wallet-inmemory' } );
@@ -31,10 +31,10 @@ async function importCardForIdentity(cardName, identity) {
 
   //declare metadata
   const metadata = {
-      userName: identity.userID,
-      version: 1,
-      enrollmentSecret: identity.userSecret,
-      businessNetwork: businessNetworkName
+    userName: identity.userID,
+    version: 1,
+    enrollmentSecret: identity.userSecret,
+    businessNetwork: businessNetworkName
   };
 
   //get connectionProfile from json, create Idcard
@@ -73,7 +73,7 @@ module.exports = {
   * @param {String} phoneNumber Member phone number
   * @param {String} email Member email
   */
- registerMember: async function (cardId, accountNumber,firstName, lastName, email, phoneNumber) {
+  registerMember: async function (cardId, accountNumber,firstName, lastName, email, phoneNumber) {
     try {
 
       //connect as admin
@@ -241,7 +241,7 @@ module.exports = {
       console.log(err);
       var error = {};
       error.error = err.message;
-      return error
+      return error;
     }
 
   },
@@ -307,7 +307,7 @@ module.exports = {
       console.log(err);
       var error = {};
       error.error = err.message;
-      return error
+      return error;
     }
 
   },
@@ -337,7 +337,7 @@ module.exports = {
       console.log(err);
       var error = {};
       error.error = err.message;
-      return error
+      return error;
     }
   },
 
@@ -366,7 +366,7 @@ module.exports = {
       console.log(err);
       var error = {};
       error.error = err.message;
-      return error
+      return error;
     }
 
   },
@@ -396,9 +396,9 @@ module.exports = {
       console.log(err);
       var error = {};
       error.error = err.message;
-      return error
+      return error;
     }
 
   }
 
-}
+};

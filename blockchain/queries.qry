@@ -15,25 +15,25 @@
 query selectMembers {
   description: "Select all members"
   statement:
-      SELECT org.clp.biznet.Member
+      SELECT com.mixchain.Member
 }
 
 
 query selectPartners {
   description: "Select all partners"
   statement:
-      SELECT org.clp.biznet.Partner
+      SELECT com.mixchain.Partner
 }
 
 query selectEarnPoints {
   description: "Select all points earned transactions"
   statement:
-      SELECT org.clp.biznet.EarnPoints
+      SELECT com.mixchain.EarnPoints
 }
 
 query selectUsePoints {
   description: "Select all points earned transactions"
   statement:
-      SELECT org.clp.biznet.UsePoints
+      SELECT com.mixchain.UsePoints
 }
 

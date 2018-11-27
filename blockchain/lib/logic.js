@@ -19,7 +19,7 @@
 
 /**
  * EarnPoints transaction
- * @param {org.clp.biznet.EarnPoints} earnPoints
+ * @param {com.mixchain.EarnPoints} earnPoints
  * @transaction
  */
 async function EarnPoints(earnPoints) {
@@ -28,13 +28,13 @@ async function EarnPoints(earnPoints) {
   earnPoints.member.points = earnPoints.member.points + earnPoints.points;
 
   //update member
-  const memberRegistry = await getParticipantRegistry('org.clp.biznet.Member');
+  const memberRegistry = await getParticipantRegistry('com.mixchain.Member');
   await memberRegistry.update(earnPoints.member);
 
   // check if partner exists on the network
-  const partnerRegistry = await getParticipantRegistry('org.clp.biznet.Partner');
-  partnerExists = await partnerRegistry.exists(earnPoints.partner.id);
-  if (partnerExists == false) {
+  const partnerRegistry = await getParticipantRegistry('com.mixchain.Partner');
+  let partnerExists = await partnerRegistry.exists(earnPoints.partner.id);
+  if (partnerExists === false) {
     throw new Error('Partner does not exist - check partner id');
   }
 
@@ -43,7 +43,7 @@ async function EarnPoints(earnPoints) {
 
 /**
  * UsePoints transaction
- * @param {org.clp.biznet.UsePoints} usePoints
+ * @param {com.mixchain.UsePoints} usePoints
  * @transaction
  */
 async function UsePoints(usePoints) {
@@ -54,16 +54,16 @@ async function UsePoints(usePoints) {
   }
 
   //update member points
-  usePoints.member.points = usePoints.member.points - usePoints.points
+  usePoints.member.points = usePoints.member.points - usePoints.points;
 
   //update member
-  const memberRegistry = await getParticipantRegistry('org.clp.biznet.Member');
+  const memberRegistry = await getParticipantRegistry('com.mixchain.Member');
   await memberRegistry.update(usePoints.member);
 
   // check if partner exists on the network
-  const partnerRegistry = await getParticipantRegistry('org.clp.biznet.Partner');
-  partnerExists = await partnerRegistry.exists(usePoints.partner.id);
-  if (partnerExists == false) {
+  const partnerRegistry = await getParticipantRegistry('com.mixchain.Partner');
+  let partnerExists = await partnerRegistry.exists(usePoints.partner.id);
+  if (partnerExists === false) {
     throw new Error('Partner does not exist - check id');
   }
 }
