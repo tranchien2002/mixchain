@@ -17,7 +17,6 @@
 const Route = use('Route');
 
 Route.group(() => {
-  Route.get('test', 'TestController.index');
   Route.post('/auth/sign-in', 'AuthController.signIn');
   Route.post('/auth/register', 'AuthController.register');
   Route.post('/auth/token/refresh', 'AuthController.refreshToken');
