@@ -1,9 +1,9 @@
-'use strict'
+'use strict';
 
 class TestController {
-    index() {
-        return "ok"
-    }
+  index() {
+    return 'ok';
+  }
 }
 
-module.exports = TestController
+module.exports = TestController;
