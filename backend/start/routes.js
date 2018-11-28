@@ -26,7 +26,7 @@ Route.group(() => {
 
   // user
   Route.post('/vehicle', 'VehicleController.store');
-  Route.post('/metric', 'VehicleController.newMetric');
+  Route.post('vehicle/:vin/metric', 'VehicleController.newMetric');
 
   Route.get('vehicle/invoices', 'VehicleController.invoices');
   Route.get('vehicle/:vin/suggestions', 'VehicleController.suggestions');
