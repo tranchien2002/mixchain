@@ -21,6 +21,20 @@ Route.group(() => {
   Route.post('/auth/register', 'AuthController.register');
   Route.post('/auth/token/refresh', 'AuthController.refreshToken');
   Route.post('/auth/logout', 'AuthController.logout');
+
+  // TODO: partner register
+
+  // user
+  Route.post('/vehicle', 'VehicleController.store');
+  Route.post('/metric', 'VehicleController.newMetric');
+
+  Route.get('vehicle/invoices', 'VehicleController.invoices');
+  Route.get('vehicle/:vin/suggestions', 'VehicleController.suggestions');
+
+  // repair shop partner
+  Route.post('/invoice', 'InvoiceController.store');
+  Route.put('/invoice', 'InvoiceController.update');
+  Route.post('/invoice/complete', 'InvoiceController.checkComplete');
 }).prefix('api/v1');
 
 Route.group(() => {
