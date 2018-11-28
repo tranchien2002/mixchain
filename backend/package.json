@@ -29,7 +29,9 @@
     "composer-admin": "^0.20.4",
     "composer-client": "^0.20.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "latest"
+  },
   "autoload": {
     "App": "./app"
   }
