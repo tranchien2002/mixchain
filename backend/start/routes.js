@@ -21,6 +21,10 @@ Route.group(() => {
   Route.post('/auth/register', 'AuthController.register');
   Route.post('/auth/token/refresh', 'AuthController.refreshToken');
   Route.post('/auth/logout', 'AuthController.logout');
+}).prefix('api/v1');
+
+Route.group(() => {
+  Route.get('/user/me', 'UserController.getUser');
 
   // TODO: partner register
 
@@ -35,10 +39,6 @@ Route.group(() => {
   Route.post('/invoice', 'InvoiceController.store');
   Route.put('/invoice', 'InvoiceController.update');
   Route.post('/invoice/complete', 'InvoiceController.checkComplete');
-}).prefix('api/v1');
-
-Route.group(() => {
-  Route.get('/user/me', 'UserController.getUser');
 }).prefix('api/v1').middleware(['auth:jwt']);
 
 Route.on('/').render('welcome');
