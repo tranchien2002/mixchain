@@ -68,12 +68,27 @@ async function UsePoints(usePoints) {
   }
 }
 
+/**
+ * UpdateInvoiceStatus transaction
+ * @param {com.mixchain.UpdateInvoiceStatus} updateInvoiceStatus
+ * @transaction 
+ */
+async function UpdateInvoiceStatus(updateInvoiceStatus) {
+  consolse.log("Update invoice status");
+  const factory = getFactory();
+  //get invoice
+  const registry = await factory.getAssetRegistry('com.mixchain.Invoice');
+  const invoice = await registry.get(updateInvoiceStatus.invoice.invoiceId)
+  invoice.invoiceStatus = updateInvoiceStatus.invoiceStatus
+  await registry.update(invoice) 
+}
 
 /**
- * RepairBegin transaction
- * @param {com.mixchain.RepairBegin} repairBegin
+ * Create Invoice
+ * @param {com.mixchain.CreateInvoice}
  * @transaction
  */
+
 // async function RepairBegin(repairBegin) {
 //   console.log('RepairBegin');
 
@@ -110,51 +125,33 @@ async function UsePoints(usePoints) {
 //   }
 // }
 
-/**
- * RepairEnd transaction
- * @param {com.mixchain.RepairEnd} repairEnd
- * @transaction
- */
-// async function RepairEnd(repairEnd) {
-//   console.log('RepairEnd');
+async function CreateInvoice(createInvoice) {
+  console.log("Create Invoice");
+  const factory = getFactory();
+  //get invoice
+  const registry = await factory.getAssetRegistry('com.mixchain.Invoice');
+  let existInvoice = registry.getAll();
+  let count = 0;
+  await existInvoice.forEach(function(asset) {
+    count ++;
+  })
+  const invoice = await factory.newResource('com.mixchain', 'Invoice', count);
+  invoice.invoiceStatus = 'PENDING';
+  invoice.partner = factory.newRelationship(
+    'com.mixchain',
+    'Vehicle',
+    createInvoice.partner.id);
+  invoice.push(createInvoice.maintanceParts)
+  //Vehicle 
+  const vehicleRegistry = await factory.getAssetRegistry('com.mixchain.Vehicle');
+  const vehicle = await vehicleRegistry.get(createInvoice)
+  invoice.vehicle = factory.newRelationship(
+    'com.mixchain',
+    'Vehicle',
+    vehicle.vin
+  );
+}
 
-//   // update status
-//   const assetRegistry = await getAssetRegistry('com.mixchain.Vehicle');
-//   const vehicle = await assetRegistry.get(repairEnd.vehicle.getIdentifier());
-//   vehicle.vehicleStatus = 'ACTIVE';
-
-//   // log
-//   const shop = repairEnd.shop;
-//   const vehicleRepairLogEntry = factory.newConcept('com.mixchain.VehicleRepairLogEntry');
-//   vehicleRepairLogEntry.vehicle = factory.newRelationship(
-//     'com.mixchain.Vehicle',
-//     vehicle.getIdentifier()
-//   );
-//   vehicleRepairLogEntry.shop = factory.newRelationship(
-//     'com.mixchain.Partner',
-//     shop.getIdentifier()
-//   );
-//   vehicleRepairLogEntry.timestamp = repairEnd.timestamp;
-//   vehicleRepairLogEntry.description = repairEnd.description;
-//   vehicleRepairLogEntry.type = "end";
-//   if (!vehicle.logEntries) {
-//     vehicle.logEntries = [];
-//   }
-//   vehicle.reapairLogEntries.push(vehicleRepairLogEntry);
-//   await assetRegistry.update(vehicle);
-
-//   //update member points
-//   repairEnd.vehicle.owner.points = repairEnd.vehicle.owner.points + repairEnd.points;
-//   const memberRegistry = await getParticipantRegistry('com.mixchain.Member');
-//   await memberRegistry.update(repairEnd.vehicle.owner);
-
-//   // check if partner exists on the network
-//   const partnerRegistry = await getParticipantRegistry('com.mixchain.Partner');
-//   let partnerExists = await partnerRegistry.exists(repairEnd.shop.id);
-//   if (partnerExists === false) {
-//     throw new Error('Partner does not exist - check partner id');
-//   }
-// }
 
 /**
  * UpdateMetric transaction

@@ -61,7 +61,6 @@ concept VehicleDetails {
   o String make
   o String modelType
   o String colour
-  o String vin optional
   o String numberPlate optional
 }
 
@@ -94,20 +93,32 @@ asset Vehicle identified by vin {
 enum InvoiceStatus {
   o PENDING
   o PAID
+  o DENIED
 }
 
 asset Invoice identified by invoiceId {
   o String invoiceId
+  o VehicleDetails vehicleDetails
   --> Vehicle vehicle
-  --> Partner garage
+  --> Partner partner
   o InvoiceStatus invoiceStatus
   o MaintancePart[] maintanceParts
 }
 
-concept MaintancePart {
-  o String name
-  o Integer quantity
+asset Gear identified by gearId {
+  o String gearId
   o Double price
+}
+
+concept MaintancePart {
+  o String description optional 
+  --> Gear gearId
+}
+
+transaction CreateInvoice {
+  --> Partner partner
+  o String vehicleId
+  o MaintancePart[] maintanceParts
 }
 
 transaction UpdateInvoiceStatus {
