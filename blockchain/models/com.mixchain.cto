@@ -28,6 +28,8 @@ participant Member identified by accountNumber {
 participant Partner identified by id {
   o String id
   o String name
+  o Double x
+  o Double y
 }
 
 concept VehicleRepairLogEntry {
