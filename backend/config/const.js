@@ -3,8 +3,9 @@
 const Const = {
   ROLE: {
     USER: 0,
-    REPAIRSHOP: 1,
-    AMDIN: 2
+    ADMIN: 1,
+    REPAIRSHOP: 2,
+    SUPPLIER: 3,
   }
 };
 

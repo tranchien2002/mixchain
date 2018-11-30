@@ -26,10 +26,9 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/user/me', 'UserController.getUser');
 
-  // TODO: partner register
+  // Route.post('/vehicle', 'VehicleController.store');
+  Route.resource('/vehicle', 'VehicleController');
 
-  // user
-  Route.post('/vehicle', 'VehicleController.store');
   Route.post('vehicle/:vin/metric', 'VehicleController.newMetric');
 
   Route.get('vehicle/invoices', 'VehicleController.invoices');
@@ -39,6 +38,13 @@ Route.group(() => {
   Route.post('/invoice', 'InvoiceController.store');
   Route.put('/invoice', 'InvoiceController.update');
   Route.post('/invoice/complete', 'InvoiceController.checkComplete');
+
+  // points exchange (proposed)
+  Route.post('/points/transfer', 'UserController@transfer');
+
+  // TODO: payment, everiToken or wokong pay
+
+  // future: certificate
 }).prefix('api/v1').middleware(['auth:jwt']);
 
 Route.on('/').render('welcome');

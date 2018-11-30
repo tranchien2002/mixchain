@@ -36,19 +36,18 @@ class AuthController {
       password: 'required'
     };
 
-    const { email, username, password } = request.only([
+    const { email, username, password, role } = request.only([
       'email',
       'username',
-      'password'
+      'password',
+      'role' // hack request role
     ]);
 
     const validation = await validate({ email, username, password }, rules);
 
     if (!validation.fails()) {
       try {
-        const user = await User.create({ email, username, password });
-
-
+        const user = await User.create({ email, username, password, role });
         let businessNetworkConnection = new BusinessNetworkConnection();
         await businessNetworkConnection.connect('admin@mixchain-network');
 
