@@ -37,3 +37,10 @@ query selectUsePoints {
       SELECT com.mixchain.UsePoints
 }
 
+query selectVehicles {
+  description: "Select all vehicles by user"
+  statement:
+      SELECT com.mixchain.Vehicle
+          WHERE (owner.accountNumber==_$id)
+}
+
