@@ -12,7 +12,6 @@ const AdminConnection = require('composer-admin').AdminConnection;
 class VehicleController {
 
   async index({request, response}) {
-
   }
 
 
@@ -38,6 +37,8 @@ class VehicleController {
       const memberRegistry = await businessNetworkConnection.getParticipantRegistry(namespace + '.Member');
       const member = await memberRegistry.get('' + id);
 
+      // TODO: add new vehicle
+
       //disconnect
       await businessNetworkConnection.disconnect('' + id);
 
@@ -50,30 +51,6 @@ class VehicleController {
   }
 
   /**
-   * Display a single vehicle.
-   * GET vehicles/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing vehicle.
-   * GET vehicles/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
    * Update vehicle details.
    * PUT or PATCH vehicles/:id
    *
@@ -82,6 +59,7 @@ class VehicleController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    // todo update version
   }
 
   /**
@@ -93,6 +71,11 @@ class VehicleController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+    // TODO: scrap vehicle
+  }
+
+  async createInvoice({params, request, reponse}) {
+    // TODO: create invoices
   }
 }
 
