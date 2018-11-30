@@ -76,19 +76,48 @@ asset Vehicle identified by vin {
   o VehicleTransferLogEntry[] logEntries optional
 }
 
-transaction RepairBegin {
-  o String detail
-  --> Vehicle vehicle
-  --> Partner shop
-  o String description optional
+// transaction RepairBegin {
+//   o String detail
+//   --> Vehicle vehicle
+//   --> Partner shop
+//   o String description optional
+// }
+
+// transaction RepairEnd {
+//   o String detail
+//   --> Vehicle vehicle
+//   --> Partner shop
+//   o String description optional
+//   o Integer points
+// }
+
+enum InvoiceStatus {
+  o PENDING
+  o PAID
 }
 
-transaction RepairEnd {
-  o String detail
+asset Invoice identified by invoiceId {
+  o String invoiceId
   --> Vehicle vehicle
-  --> Partner shop
-  o String description optional
-  o Integer points
+  --> Partner garage
+  o InvoiceStatus invoiceStatus
+  o MaintancePart[] maintanceParts
+}
+
+concept MaintancePart {
+  o String name
+  o Integer quantity
+  o Double price
+}
+
+transaction UpdateInvoiceStatus {
+  o InvoiceStatus invoiceStatus
+  --> Invoice invoice
+}
+
+event UpdateInvoice {
+  o Invoice invoice
+  o InvoiceStatus invoiceStatus
 }
 
 transaction UpdateMetric {
