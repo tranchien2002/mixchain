@@ -147,3 +147,7 @@ transaction PrivateVehicleTransfer {
   o String specialNotes optional
 }
 
+transaction CreateVehicle {
+  --> Partner shop
+  --> Member user
+}
