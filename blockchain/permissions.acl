@@ -94,30 +94,30 @@ rule PartnerAccessMember {
 }
 
 //Partners to have read access to EarnPoints transaction where they are the partner
-rule PartnerAccessEarnPoints {
-    description: "Allow Partners read only access to EarnPoints transaction where they are the partner"
-    participant(p): "com.mixchain.Partner"
-    operation: READ
-    resource(r): "com.mixchain.EarnPoints"
-    condition: (r.partner.getIdentifier() === p.getIdentifier())
-    action: ALLOW
-}
+// rule PartnerAccessEarnPoints {
+//     description: "Allow Partners read only access to EarnPoints transaction where they are the partner"
+//     participant(p): "com.mixchain.Partner"
+//     operation: READ
+//     resource(r): "com.mixchain.EarnPoints"
+//     condition: (r.partner.getIdentifier() === p.getIdentifier())
+//     action: ALLOW
+// }
 
 //Partners to have read access to UsePoints transaction where they are the partner
-rule PartnerAccessUsePoints {
-    description: "Allow Partners read only access to UsePoints transaction where they are the partner"
-    participant(p): "com.mixchain.Partner"
-    operation: READ
-    resource(r): "com.mixchain.UsePoints"
-    condition: (r.partner.getIdentifier() === p.getIdentifier())
-    action: ALLOW
-}
+// rule PartnerAccessUsePoints {
+//     description: "Allow Partners read only access to UsePoints transaction where they are the partner"
+//     participant(p): "com.mixchain.Partner"
+//     operation: READ
+//     resource(r): "com.mixchain.UsePoints"
+//     condition: (r.partner.getIdentifier() === p.getIdentifier())
+//     action: ALLOW
+// }
 
 rule PartnerAccessVehicle {
-    description: ""
+    description: "..."
     participant: "com.mixchain.Partner"
     operation: ALL
-    resource: "com.mixchain.CreateVehicle"
+    resource: "com.mixchain.Vehicle"
     action: ALLOW
 }
 

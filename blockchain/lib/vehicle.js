@@ -27,6 +27,7 @@ async function createVehicle(createVehicle) {
   details.make = "Toyota"
   details.modelType = "Camry"
   details.colour = "black"
+  details.vin = '' + newAssetId
   vehicle.vehicleDetails = details
   await assetReg.add(vehicle);
 }

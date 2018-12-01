@@ -21,6 +21,8 @@ describe('Setup', () => {
 
     const partner = factory.newResource(NS, 'Partner', '2');
     partner.name = '2';
+    partner.x = 0
+    partner.y = 0
 
     const pm = await businessNetworkConnection.getParticipantRegistry(
         NS + '.Member'

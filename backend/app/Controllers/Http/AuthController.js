@@ -78,6 +78,8 @@ class AuthController {
         if(role === Const.ROLE.REPAIRSHOP) {
           const partner = factory.newResource(namespace, 'Partner', '' + user.id);
           partner.name = user.username;
+          partner.x = 0;
+          partner.y = 0;
 
           //add member participant
           const participantRegistry = await businessNetworkConnection.getParticipantRegistry(namespace + '.Partner');
