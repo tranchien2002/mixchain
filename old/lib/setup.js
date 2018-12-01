@@ -226,3 +226,4 @@ async function setupDemo(setupDemo) {
   const vehicleRegistry = await getAssetRegistry(NS_D + '.Vehicle');
   await vehicleRegistry.addAll(vs);
 }
+``
