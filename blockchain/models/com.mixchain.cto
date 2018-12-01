@@ -109,6 +109,7 @@ asset Invoice identified by invoiceId {
 asset Gear identified by gearId {
   o String gearId
   o Double price
+  --> Supplier supplier
 }
 
 concept MaintancePart {
@@ -165,4 +166,9 @@ transaction CreateVehicle {
 }
 
 transaction SetupDemo {
+}
+
+participant Supplier identified by supplierId{
+  o String supplierId
+  o String name optional
 }
