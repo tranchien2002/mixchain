@@ -180,4 +180,27 @@ async function setupDemo(setupDemo) {
   }
   const vehicleRegistry = await getAssetRegistry('com.mixchain' + '.Vehicle');
   await vehicleRegistry.addAll(vs);
+
+  //register supplier && Gear
+  const supplierReg = factory.getParticipantRegistry('com.mixchain.Supplier')
+  let suppliers = []
+  for(let i = 0; i < 10; i++) {
+    suppliers.push(factory.newResource('com.mixchain', 'Supplier', '' + i))   
+  }
+  let gears = []
+  for(const supplier in suppliers) {
+    for(let i = 0; i < 5; i++) {
+      const gear = factory.newResource('com.mixchain', 'Gear', '' + i);
+      gear.supplier = factory.newRelationship(
+        'com.mixchain',
+        'Supplier',
+        supplier.supplierId
+      )
+      gear.price = i * 2 + 1
+    }
+    gears.push(gear)
+  }
+
+  // const gearReg = await getAssetRegistry('com.mixchain.Gear');
+  // await gearReg.addAll(gears);
 }
