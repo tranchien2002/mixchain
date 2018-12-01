@@ -28,6 +28,8 @@ participant Member identified by accountNumber {
 participant Partner identified by id {
   o String id
   o String name
+  o Double x
+  o Double y
 }
 
 concept VehicleRepairLogEntry {
@@ -58,6 +60,7 @@ enum VehicleStatus {
 }
 
 concept VehicleDetails {
+  o String vin
   o String make
   o String modelType
   o String colour
@@ -70,8 +73,6 @@ asset Vehicle identified by vin {
   o VehicleDetails vehicleDetails
   o VehicleStatus vehicleStatus
   o String numberPlate optional
-  o VehicleRepairLogEntry[] repairLogEntries optional
-  o VehicleMetricLogEntry[] metricLogEntries optional
   o VehicleTransferLogEntry[] logEntries optional
 }
 
@@ -161,4 +162,7 @@ transaction PrivateVehicleTransfer {
 transaction CreateVehicle {
   --> Partner shop
   --> Member user
+}
+
+transaction SetupDemo {
 }

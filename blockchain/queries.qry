@@ -25,6 +25,13 @@ query selectPartners {
       SELECT com.mixchain.Partner
 }
 
+query selectPartnerByName {
+  description: "Select partner by name"
+  statement:
+      SELECT com.mixchain.Partner 
+          WHERE (name == _$name)
+}
+
 query selectEarnPoints {
   description: "Select all points earned transactions"
   statement:
@@ -44,3 +51,22 @@ query selectVehicles {
           WHERE (owner.accountNumber==_$id)
 }
 
+query selectAllGears {
+  description: "Select all gears"
+  statement:
+      SELECT com.mixchain.Gear
+}
+
+query selectAllInvoicesOfVehicle {
+  description: "Select all invoices of vehicles"
+  statement: 
+      SELECT com.mixchain.Invoice
+        WHERE (vehicle.vin == _$vin)
+}
+
+query selectAllInvoicesOfPartner {
+  description: "Select all invoices of vehicles"
+  statement: 
+      SELECT com.mixchain.Invoice
+        WHERE (vehicle.vin == _$vin)
+}
