@@ -113,6 +113,14 @@ rule PartnerAccessUsePoints {
     action: ALLOW
 }
 
+rule PartnerAccessVehicle {
+    description: ""
+    participant: "com.mixchain.Partner"
+    operation: ALL
+    resource: "com.mixchain.CreateVehicle"
+    action: ALLOW
+}
+
 rule SystemACL {
   description:  "System ACL to permit all access"
   participant: "ANY"

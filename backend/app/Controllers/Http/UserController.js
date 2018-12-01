@@ -3,11 +3,12 @@
 const BusinessNetworkConnection = require('composer-client').BusinessNetworkConnection;
 const AdminConnection = require('composer-admin').AdminConnection;
 const { BusinessNetworkDefinition, CertificateUtil, IdCard } = require('composer-common');
+const Const = require('../../../config/const');
 
 class UserController {
   async getUser({ response, auth }) {
     try {
-      const { id, email, username } = await auth.getUser();
+      const { id, email, username, role } = await auth.getUser();
 
       //connect to network with cardId
       let businessNetworkConnection = new BusinessNetworkConnection();
@@ -15,7 +16,12 @@ class UserController {
 
       //get member from the network
       let namespace = 'com.mixchain';
-      const memberRegistry = await businessNetworkConnection.getParticipantRegistry(namespace + '.Member');
+      let key = '.Member';
+      if(role === Const.ROLE.REPAIRSHOP) {
+        key = '.Partner';
+      }
+
+      const memberRegistry = await businessNetworkConnection.getParticipantRegistry(namespace + key);
       const member = await memberRegistry.get('' + id);
 
       //disconnect

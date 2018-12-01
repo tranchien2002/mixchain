@@ -1,11 +1,12 @@
 'use strict';
 
 /**
- * EarnPoints transaction
- * @param {com.mixchain.CreateVehicle} tx
+ * createVehicle transaction
+ * @param {com.mixchain.CreateVehicle} createVehicle
  * @transaction
  */
-async function createVehicle(tx) {
+async function createVehicle(createVehicle) {
+  const factory = getFactory()
   const assetReg = await getAssetRegistry('com.mixchain.Vehicle');   
   let existingAssets = await assetReg.getAll();
   
@@ -15,17 +16,17 @@ async function createVehicle(tx) {
   });
   let newAssetId =  numberOfAssets + 1;
 
-  let vehicle = factory.newResource('com.mixchain.Vehicle')
-  vehicle.vin = '' + newAssetId
-  vehicle.shop = factory.newRelationship(
-    'com.mixchain',
-    'Partner',
-    tx.shop.id
-  );
-  vehicle.user = factory.newRelationship(
+  let vehicle = factory.newResource('com.mixchain', 'Vehicle', '' + newAssetId)
+  vehicle.owner = factory.newRelationship(
     'com.mixchain',
     'Member',
-    tx.user.accountNumber
+    createVehicle.user.accountNumber
   );
-  await memberRegistry.add(vehicle);
+  vehicle.vehicleStatus = "ACTIVE"
+  let details = factory.newConcept('com.mixchain', 'VehicleDetails')
+  details.make = "Toyota"
+  details.modelType = "Camry"
+  details.colour = "black"
+  vehicle.vehicleDetails = details
+  await assetReg.add(vehicle);
 }

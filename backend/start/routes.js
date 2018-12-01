@@ -26,6 +26,7 @@ Route.group(() => {
 Route.group(() => {
   Route.get('/user/me', 'UserController.getUser');
   Route.get('/user/vehicles', 'UserController.getVehicles');
+  Route.post('/user/:id/vehicles', 'PartnerController.createVehicle');
 
   // Route.post('/vehicle', 'VehicleController.store');
   Route.resource('/vehicle', 'VehicleController');

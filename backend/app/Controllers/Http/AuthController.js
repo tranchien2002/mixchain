@@ -6,6 +6,7 @@ const Token = use('App/Models/Token');
 const BusinessNetworkConnection = require('composer-client').BusinessNetworkConnection;
 const AdminConnection = require('composer-admin').AdminConnection;
 const { BusinessNetworkDefinition, CertificateUtil, IdCard } = require('composer-common');
+const Const = require('../../../config/const');
 
 class AuthController {
   async signIn({ request, response, auth }) {
@@ -36,39 +37,53 @@ class AuthController {
       password: 'required'
     };
 
-    const { email, username, password, role } = request.only([
+    let { email, username, password, role } = request.only([
       'email',
       'username',
       'password',
       'role' // hack request role
     ]);
+    role = parseInt(role, 10);
 
     const validation = await validate({ email, username, password }, rules);
 
     if (!validation.fails()) {
       try {
+        if(!role) {
+          role = Const.ROLE.USER;
+        }
         const user = await User.create({ email, username, password, role });
         let businessNetworkConnection = new BusinessNetworkConnection();
         await businessNetworkConnection.connect('admin@mixchain-network');
 
         //get the factory for the business network
         let factory = businessNetworkConnection.getBusinessNetwork().getFactory();
-
-        //create member participant
         let namespace = 'com.mixchain';
-        const member = factory.newResource(namespace, 'Member', '' + user.id);
-        member.firstName = user.username;
-        member.lastName = user.username;
-        member.email = user.email;
-        member.phoneNumber = '';
-        member.points = 0;
+        let identity;
 
-        //add member participant
-        const participantRegistry = await businessNetworkConnection.getParticipantRegistry(namespace + '.Member');
-        await participantRegistry.add(member);
+        if(role === Const.ROLE.USER) {
+          const member = factory.newResource(namespace, 'Member', '' + user.id);
+          member.firstName = user.username;
+          member.lastName = user.username;
+          member.email = user.email;
+          member.phoneNumber = '';
+          member.points = 0;
 
-        //issue identity
-        const identity = await businessNetworkConnection.issueIdentity(namespace + '.Member#' + user.id, '' + user.id);
+          //add member participant
+          const participantRegistry = await businessNetworkConnection.getParticipantRegistry(namespace + '.Member');
+          await participantRegistry.add(member);
+          identity = await businessNetworkConnection.issueIdentity(namespace + '.Member#' + user.id, '' + user.id);
+        }
+
+        if(role === Const.ROLE.REPAIRSHOP) {
+          const partner = factory.newResource(namespace, 'Partner', '' + user.id);
+          partner.name = user.username;
+
+          //add member participant
+          const participantRegistry = await businessNetworkConnection.getParticipantRegistry(namespace + '.Partner');
+          await participantRegistry.add(partner);
+          identity = await businessNetworkConnection.issueIdentity(namespace + '.Partner#' + user.id, '' + user.id);
+        }
 
         //import card for identity
         await this.importCardForIdentity('' + user.id, identity);
